@@ -112,9 +112,9 @@ def get_next_lead():
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
     c.execute("SELECT * FROM leads WHERE status='NEW' ORDER BY created_at LIMIT 1")
-    lead = c.fetchone()
+    row = c.fetchone()
     conn.close()
-    return lead
+    return dict(row) if row else None
 
 def save_pitch_to_ledger(lead_id, pitch_text):
     conn = sqlite3.connect(DB_PATH)
