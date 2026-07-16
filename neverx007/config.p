@@ -1,1 +1,0 @@
-JSON2VIDEO_API_KEY = os.getenv("JSON2VIDEO_API_KEY", "")
