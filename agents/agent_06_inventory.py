@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""NeverX006 - The Inventory Agent (Job 73 fleet).
+"""NeverX006 v2 - The Inventory Agent (Job 73 fleet).
 
 Walks any folder you point him at and reports what is really in there.
 Costs nothing to run. Pure Python. No API. No brain rented. Cable bill only.
 
+v2 CHANGE: entry points are now found by READING THE CODE, not guessing
+the filename. v1 missed doctor.py and governor.py in NorthFraim because
+their names did not match a hint list. v2 looks for the real signal:
+    if __name__ == "__main__":
+That line is a fact. A filename is an opinion.
+
 Usage:
     python3 agents/agent_06_inventory.py ~/some-old-job
     python3 agents/agent_06_inventory.py            (defaults to current folder)
-
-Reports:
-    file counts, languages, total size, python compile pass/fail,
-    README present, LICENSE present (right-to-sell tag), last touched date,
-    entry points (files you actually run), and an alive/dead verdict.
 """
 import os
 import sys
@@ -28,7 +29,7 @@ LANG_BY_EXT = {
     ".mp4": "Video", ".png": "Image", ".jpg": "Image", ".db": "Database",
 }
 
-RUNNABLE_HINTS = ("main", "app", "run", "server", "pipeline", "start", "cli")
+NAME_HINTS = ("main", "app", "run", "server", "pipeline", "start", "cli")
 
 
 class Agent06Inventory:
@@ -85,13 +86,32 @@ class Agent06Inventory:
                     break
         return hits
 
+    def _has_main_block(self, p):
+        """Read the file. Look for the real launch signal."""
+        try:
+            with open(p, "r", encoding="utf-8", errors="ignore") as f:
+                text = f.read()
+        except Exception:
+            return False
+        for line in text.splitlines():
+            s = line.strip().replace(" ", "").replace("'", '"')
+            if s.startswith('if__name__=="__main__"'):
+                return True
+        return False
+
     def entry_points(self):
-        hits = []
+        """Returns (confirmed, maybes).
+        confirmed = code proves it launches.
+        maybes    = filename only suggests it. Weaker. Reported separately.
+        """
+        confirmed = []
+        maybes = []
         for p in self.py_ok:
-            stem = p.stem.lower()
-            if any(h in stem for h in RUNNABLE_HINTS):
-                hits.append(p)
-        return hits
+            if self._has_main_block(p):
+                confirmed.append(p)
+            elif any(h in p.stem.lower() for h in NAME_HINTS):
+                maybes.append(p)
+        return confirmed, maybes
 
     def rel(self, p):
         try:
@@ -102,7 +122,7 @@ class Agent06Inventory:
     def report(self):
         line = "=" * 62
         print(line)
-        print("NEVERX006 - INVENTORY REPORT")
+        print("NEVERX006 v2 - INVENTORY REPORT")
         print("FOLDER: %s" % self.root)
         print(line)
 
@@ -129,39 +149,48 @@ class Agent06Inventory:
         else:
             print("LICENSE : NONE  (no license = all rights reserved by default)")
 
-        print("\n--- WHAT YOU ACTUALLY RUN ---")
-        eps = self.entry_points()
-        if eps:
-            for p in eps:
+        confirmed, maybes = self.entry_points()
+
+        print("\n--- WHAT YOU ACTUALLY RUN (code-verified) ---")
+        if confirmed:
+            for p in confirmed:
                 print("  -> %s" % self.rel(p))
         else:
-            print("  none obvious (no main/app/run/server/pipeline files)")
+            print("  none - no file has an if __name__ == \"__main__\" block")
+
+        if maybes:
+            print("\n--- MAYBE (filename hint only, unverified) ---")
+            for p in maybes:
+                print("  ?  %s" % self.rel(p))
 
         print("\n--- LAST TOUCHED ---")
+        days = None
         if self.newest:
             new = datetime.fromtimestamp(self.newest)
             old = datetime.fromtimestamp(self.oldest)
             days = (datetime.now() - new).days
             print("Newest file : %s  (%d days ago)" % (new.strftime("%Y-%m-%d"), days))
             print("Oldest file : %s" % old.strftime("%Y-%m-%d"))
-        else:
-            days = None
 
         print("\n--- X006 VERDICT ---")
-        for v in self.verdict(days, eps, license_):
+        for v in self.verdict(days, confirmed, maybes, license_):
             print("  %s" % v)
         print("\n" + line)
 
-    def verdict(self, days, eps, license_):
+    def verdict(self, days, confirmed, maybes, license_):
         out = []
         if not self.files:
             return ["EMPTY - nothing here."]
         if self.py_broken:
             out.append("BROKEN CODE - %d python file(s) do not compile." % len(self.py_broken))
-        if not eps and self.langs.get("Python", 0) > 0:
-            out.append("NO FRONT DOOR - python here, but nothing obvious to run.")
-        if eps:
-            out.append("RUNNABLE - has %d entry point(s). Something here starts up." % len(eps))
+        elif self.langs.get("Python", 0) > 0:
+            out.append("ALL PYTHON COMPILES CLEAN - %d file(s), zero broken." % len(self.py_ok))
+        if confirmed:
+            out.append("RUNNABLE - %d code-verified entry point(s)." % len(confirmed))
+        elif self.langs.get("Python", 0) > 0:
+            out.append("NO FRONT DOOR - python here, but nothing launches itself.")
+        if maybes:
+            out.append("UNVERIFIED - %d file(s) look runnable by name but have no main block." % len(maybes))
         if self.langs.get("HTML", 0) > 0:
             out.append("HAS A STOREFRONT PIECE - html found. A customer could see something.")
         else:
@@ -172,7 +201,7 @@ class Agent06Inventory:
             out.append("COLD - untouched %d days. Likely scaffolding or parked." % days)
         elif days is not None and days > 30:
             out.append("PARKED - untouched %d days." % days)
-        else:
+        elif days is not None:
             out.append("WARM - worked on recently.")
         out.append("NOTE: X006 reports facts. The Governor decides what it is worth.")
         return out
