@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Born AI Jobs | Airbnb & Cleaning Services</title>
+    <style>
+        :root{--primary:#10b981;--accent:#06b6d4;--dark:#020617;--darker:#0f172a;--light:#f8fafc;--gray:#94a3b8;--gradient:linear-gradient(135deg,var(--primary),var(--accent));--radius:16px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--darker);color:var(--light);line-height:1.6}
+        .hero{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:8rem 5% 4rem;max-width:1400px;margin:0 auto;align-items:center}
+        .hero-title{font-size:3.5rem;font-weight:900;line-height:1.1;margin-bottom:1.5rem}
+        .gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .btn-primary{display:inline-block;background:var(--gradient);color:white;padding:1rem 2rem;border-radius:var(--radius);text-decoration:none;font-weight:600}
+        .services{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:4rem 5%;max-width:1200px;margin:0 auto}
+        .service-card{background:linear-gradient(145deg,#1e293b,#0f172a);padding:2rem;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.05)}
+        nav{padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(2,6,23,0.8);backdrop-filter:blur(20px);position:fixed;top:0;width:100%;z-index:1000}
+        nav a{color:var(--light);text-decoration:none;margin-left:1.5rem;font-size:0.875rem}
+       
+        .booking-section {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 4rem 5%;
+            text-align: center;
+        }
+        .booking-form {
+            max-width: 600px;
+            margin: 2rem auto 0;
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: #1e293b;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="font-weight:700;font-size:1.25rem;">🏠 Born AI Jobs</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/norframe">Norframe</a>
+            <a href="/neverx007">NeverX007</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding-top:8rem;">
+        <div>
+            <span style="background:rgba(16,185,129,0.1);border:1px solid var(--primary);color:var(--primary);padding:0.5rem 1rem;border-radius:50px;font-size:0.875rem;">Springfield, Ohio</span>
+            <h1 class="hero-title">Airbnb & Property <span class="gradient-text">Services Done Right</span></h1>
+            <p style="font-size:1.25rem;color:var(--gray);margin-bottom:2rem;">Cleaning, turnover, maintenance, inspections — 73 services for property owners and Airbnb hosts.</p>
+            <a href="#book" class="btn-primary">📅 Book a Service</a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">🧹</div><p>Cleaning</p></div>
+            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">🏠</div><p>Turnover</p></div>
+            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">🔧</div><p>Maintenance</p></div>
+            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">📋</div><p>Inspections</p></div>
+        </div>
+    </section>
+
+    <section style="padding:4rem 5%;text-align:center;background:rgba(15,23,42,0.5);">
+        <h2 style="font-size:2.5rem;margin-bottom:3rem;">📋 <span class="gradient-text">73 Services</span></h2>
+        <div class="services">
+            <div class="service-card"><h3>🧹 Cleaning</h3><p style="color:var(--gray);margin-top:0.5rem;">Standard, deep, commercial, post-construction</p></div>
+            <div class="service-card"><h3>🏠 Property Turnover</h3><p style="color:var(--gray);margin-top:0.5rem;">Move-in/move-out, full resets, Airbnb ready</p></div>
+            <div class="service-card"><h3>🔧 Maintenance</h3><p style="color:var(--gray);margin-top:0.5rem;">Repairs, painting, drywall, flooring</p></div>
+            <div class="service-card"><h3>📋 Inspections</h3><p style="color:var(--gray);margin-top:0.5rem;">Safety, pest, mold, electrical</p></div>
+            <div class="service-card"><h3>🌿 Landscaping</h3><p style="color:var(--gray);margin-top:0.5rem;">Mowing, trimming, leaf removal</p></div>
+            <div class="service-card"><h3>❄️ Seasonal</h3><p style="color:var(--gray);margin-top:0.5rem;">Snow removal, holiday setup</p></div>
+        </div>
+    </section>
+
+    <!-- BOOKING SECTION -->
+    <section id="book" class="booking-section">
+        <h2 style="font-size:2.5rem;margin-bottom:1rem;">Ready to Get Your Property Taken Care Of?</h2>
+        <p style="color:var(--gray);max-width:600px;margin:0 auto 2rem;">Fill out the form below and I’ll get back to you within a few hours with availability and pricing.</p>
+        
+        <form class="booking-form" action="#" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="service">What Service Do You Need?</label>
+                <select id="service" name="service" required>
+                    <option value="">Select a service...</option>
+                    <option value="cleaning">Cleaning (Standard or Deep)</option>
+                    <option value="turnover">Airbnb Turnover / Reset</option>
+                    <option value="maintenance">Maintenance & Repairs</option>
+                    <option value="inspection">Property Inspection</option>
+                    <option value="landscaping">Landscaping</option>
+                    <option value="other">Other / Multiple Services</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message / Details</label>
+                <textarea id="message" name="message" placeholder="Tell me about the property and what you need..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn-primary" style="width:100%;text-align:center;">Send Request</button>
+            <p style="color:var(--gray);font-size:0.8rem;margin-top:1rem;">I usually respond within 2–3 hours during the day.</p>
+        </form>
+    </section>
+
+    <footer style="padding:3rem 5%;text-align:center;color:var(--gray);border-top:1px solid rgba(255,255,255,0.05);">
+        <p>© 2026 Born AI Jobs — Job 73. Springfield, Ohio.</p>
+    </footer>
+</body>
+</html>
+

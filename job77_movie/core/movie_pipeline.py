@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Full PDF -> real movie pipeline: extract -> script -> render.
+
+Now tier-aware across all 5 tiers (short/medium/novel/feature/full_feature),
+routed through chunked_generator so multi-chunk tiers work correctly.
+"""
+import os
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from job77_movie.core.extractor import extract_text_from_pdf
+from job77_movie.core.chunked_generator import generate_for_tier
+# Render backend switch. RENDER_BACKEND=local uses the FFmpeg
+# renderer (zero credits); anything else (default) uses JSON2Video.
+# JSON2Video stays fully intact as the fallback.
+_RENDER_BACKEND = os.environ.get("RENDER_BACKEND", "json2video").strip().lower()
+if _RENDER_BACKEND == "local":
+    from job77_movie.core.local_renderer import render_movie
+    _BACKEND_LABEL = "local FFmpeg (zero credits)"
+else:
+    from job77_movie.core.video_renderer import render_movie
+    _BACKEND_LABEL = "JSON2Video"
+from job77_movie.core.movie_workflow import create_movie_project, update_project_status
+from job77_movie.config.tiers import get_tier
+
+OUTPUT_DIR = "data/movies"
+
+
+def run_pipeline(pdf_path: str, user_email: str = "test@local", tier: str = "short"):
+    tier_config = get_tier(tier)
+
+    print("NorthFraim Job 77 -- PDF to Movie")
+    print(f"Tier: {tier_config['name']} (${tier_config['price']}, target ~{tier_config['target_minutes']} min)")
+    print(f"Input: {pdf_path}")
+
+    project_id = create_movie_project(pdf_path, user_email)
+    print(f"Project #{project_id} created")
+
+    print("Stage 1: Extracting text...")
+    extraction = extract_text_from_pdf(pdf_path)
+    if not extraction.get("success"):
+        update_project_status(project_id, "failed_extraction")
+        print(f"FAILED: {extraction.get('error')}")
+        return extraction
+    print(f"  Extracted {extraction['page_count']} pages, quality: {extraction['quality']}")
+    update_project_status(project_id, "extracted")
+
+    print(f"Stage 2: Generating script with Grok ({tier_config['chunks']} chunk(s) planned)...")
+    script = generate_for_tier(extraction["text"], tier)
+    if not script.get("success"):
+        update_project_status(project_id, "failed_script")
+        print(f"FAILED: {script.get('error')}")
+        return script
+    print(f"  Title: {script.get('title')}")
+    print(f"  Scenes: {len(script.get('scenes', []))}")
+    print(f"  Chunks used: {script.get('chunks_used')}")
+    print(f"  Estimated duration: {script.get('estimated_duration_label')}")
+    update_project_status(project_id, "scripted")
+
+    print(f"Stage 3: Rendering real video with {_BACKEND_LABEL}...")
+    result = render_movie(script, OUTPUT_DIR)
+    if not result.get("success"):
+        update_project_status(project_id, "failed_render")
+        print(f"FAILED: {result.get('error')}")
+        return result
+
+    update_project_status(project_id, "complete")
+    print(f"DONE. Real movie at: {result['video_path']}")
+    return {
+        "success": True,
+        "project_id": project_id,
+        "title": script.get("title"),
+        "video_path": result["video_path"],
+        "tier": tier_config["name"],
+        "scenes": len(script.get("scenes", [])),
+        "estimated_duration_label": script.get("estimated_duration_label"),
+    }
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python movie_pipeline.py <path_to_pdf> [--tier short|medium|novel|feature|full_feature]")
+        sys.exit(1)
+
+    tier_arg = "short"
+    if "--tier" in sys.argv:
+        idx = sys.argv.index("--tier")
+        if idx + 1 < len(sys.argv):
+            tier_arg = sys.argv[idx + 1]
+
+    result = run_pipeline(sys.argv[1], tier=tier_arg)
+    print(result)

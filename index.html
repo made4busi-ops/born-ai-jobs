@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Northframe • $25 Membership</title>
+  <style>
+    body { font-family: system-ui; max-width: 700px; margin: 40px auto; padding: 20px; }
+    .offer { background: #f8f9fa; padding: 30px; border-radius: 12px; border: 3px solid #0a0; }
+    input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; }
+    button { background: #0a0; color: white; padding: 14px 30px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; width: 100%; }
+  </style>
+</head>
+<body>
+
+  <div class="offer">
+    <h2>🔥 3-Week Membership — Only $25</h2>
+    <p><strong>4 videos per week for 3 weeks = 12 videos total</strong></p>
+    
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <button type="submit">Start My $25 Membership</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('plan', '3-week-membership');
+
+      try {
+        const res = await fetch('http://localhost:8001/signup', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        alert(data.message || 'Membership started!');
+        this.reset();
+      } catch (err) {
+        alert('Error: Is the server running?');
+      }
+    });
+  </script>
+
+</body>
+</html>
