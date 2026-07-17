@@ -43,7 +43,7 @@ def log_fuel(usage, model):
 def monster_check(text, config):
     if '[' in text or '{' in text or 'TODO' in text.upper(): return False, "Placeholder detected"
     if len(text.split()) < 50: return False, "Too short"
-    ai_phrases = ['as an ai', 'i cannot', 'i apologize', 'here is a', 'certainly!', 'of course!', "i'm sorry"]
+    ai_phrases = ['*brief note', '*why this works', 'meta-commentary', '## ', '# cold email', 'as an ai', 'i cannot', 'i apologize', 'here is a', 'certainly!', 'of course!', "i'm sorry"]
     for phrase in ai_phrases:
         if phrase in text.lower(): return False, f"AI leakage: '{phrase}'"
     
@@ -63,7 +63,7 @@ def write_pitch(lead, config):
     system_prompt = f"""You are a direct-response copywriter. You write actual cold email pitches, not analysis documents.
     Your output must be the exact email text ready to be sent to the lead.
     HONESTY LAW: Sign as {config['sender_name']}, Business: {config['business_name']}, Phone: {config['phone']}, Email: {config['email']}.
-    ONLY use stats from this approved list: {config.get('approved_statistics', ['none'])}. No invented numbers. No fluff. Strict logic."""
+    ONLY use stats from this approved list: {config.get('approved_statistics', ['none'])}. No invented numbers. OUTPUT MUST BE PURE EMAIL TEXT. Do not include any meta-commentary, explanations, markdown headers, or notes about the pitch. Start directly with the greeting and end with the signature. No fluff. Strict logic."""
     
     user_msg = f"""Write a cold email pitch to: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
     

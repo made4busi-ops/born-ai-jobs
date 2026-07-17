@@ -47,7 +47,7 @@ def monster_check(text, config):
     
     # UPGRADED MONSTER TEETH
     ai_phrases = [
-        'as an ai', 'i cannot', 'i apologize', 'here is a', 'certainly!', 'of course!', "i'm sorry",
+        '*brief note', '*why this works', 'meta-commentary', '## ', '# cold email', 'as an ai', 'i cannot', 'i apologize', 'here is a', 'certainly!', 'of course!', "i'm sorry",
         'i need to be direct', 'testing my boundaries', 'i won\'t do', 'made by anthropic', 
         'i will decline', "what's the actual goal", 'jailbreak instructions', "those jailbreak"
     ]
@@ -73,7 +73,7 @@ def write_pitch(lead, config):
     You are a direct-response copywriter. You write actual cold email pitches, not analysis documents.
     Your output must be the exact email text ready to be sent to the lead.
     HONESTY LAW: Sign as {config['sender_name']}, Business: {config['business_name']}, Phone: {config['phone']}, Email: {config['email']}.
-    ONLY use stats from this approved list: {config.get('approved_statistics', ['none'])}. No invented numbers."""
+    ONLY use stats from this approved list: {config.get('approved_statistics', ['none'])}. No invented numbers. OUTPUT MUST BE PURE EMAIL TEXT. Do not include any meta-commentary, explanations, markdown headers, or notes about the pitch. Start directly with the greeting and end with the signature."""
     
     user_msg = f"""Analyze this lead and write a master-level cold email pitch to: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
     
