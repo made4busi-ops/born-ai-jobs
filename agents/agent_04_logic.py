@@ -67,12 +67,12 @@ def write_pitch(lead, config):
     user_msg = f"""Write a pitch to: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
     
     response = client.messages.create(
-        model="claude-3-5-haiku-20241022",
+        model="claude-haiku-4-5-20251001",
         max_tokens=500,
         system=system_prompt,
         messages=[{"role": "user", "content": user_msg}]
     )
-    log_fuel(response.usage, "claude-3-5-haiku-20241022")
+    log_fuel(response.usage, "claude-haiku-4-5-20251001")
     return response.content[0].text.strip()
 
 def main():
