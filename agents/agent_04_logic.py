@@ -60,11 +60,12 @@ def monster_check(text, config):
 
 def write_pitch(lead, config):
     client = anthropic.Anthropic()
-    system_prompt = f"""You are NeverX004, the Logic Brain. You analyze facts and write with structural precision.
+    system_prompt = f"""You are a direct-response copywriter. You write actual cold email pitches, not analysis documents.
+    Your output must be the exact email text ready to be sent to the lead.
     HONESTY LAW: Sign as {config['sender_name']}, Business: {config['business_name']}, Phone: {config['phone']}, Email: {config['email']}.
     ONLY use stats from this approved list: {config.get('approved_statistics', ['none'])}. No invented numbers. No fluff. Strict logic."""
     
-    user_msg = f"""Write a pitch to: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
+    user_msg = f"""Write a cold email pitch to: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
     
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",

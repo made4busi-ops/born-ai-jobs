@@ -32,8 +32,7 @@ def save_fuel(fuel):
 
 def log_fuel(usage, model):
     fuel = load_fuel()
-    # Sonnet pricing: $3 in, $15 out
-    cost = (usage.input_tokens / 1_000_000) * 3.00 + (usage.output_tokens / 1_000_000) * 15.00
+    cost = (usage.input_tokens / 1_000_000) * 1.00 + (usage.output_tokens / 1_000_000) * 5.00
     fuel["total_calls"] += 1
     fuel["total_tokens_in"] += usage.input_tokens
     fuel["total_tokens_out"] += usage.output_tokens
@@ -45,9 +44,16 @@ def log_fuel(usage, model):
 def monster_check(text, config):
     if '[' in text or '{' in text or 'TODO' in text.upper(): return False, "Placeholder detected"
     if len(text.split()) < 50: return False, "Too short"
-    ai_phrases = ['as an ai', 'i cannot', 'i apologize', 'here is a', 'certainly!', 'of course!', "i'm sorry"]
+    
+    # UPGRADED MONSTER TEETH
+    ai_phrases = [
+        'as an ai', 'i cannot', 'i apologize', 'here is a', 'certainly!', 'of course!', "i'm sorry",
+        'i need to be direct', 'testing my boundaries', 'i won\'t do', 'made by anthropic', 
+        'i will decline', "what's the actual goal", 'jailbreak instructions', "those jailbreak"
+    ]
+    text_lower = text.lower()
     for phrase in ai_phrases:
-        if phrase in text.lower(): return False, f"AI leakage: '{phrase}'"
+        if phrase in text_lower: return False, f"AI leakage/Refusal: '{phrase}'"
     
     phone_pattern = r'\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'
     real_phone = re.sub(r'\D', '', config.get('phone', ''))[-10:]
@@ -64,13 +70,15 @@ def write_pitch(lead, config):
     client = anthropic.Anthropic()
     system_prompt = f"""You are NeverX005, a clone of GLM-5.2. You are the Master Reasoner.
     You see all angles, find hidden leverage, and write deeply persuasive strategy.
+    You are a direct-response copywriter. You write actual cold email pitches, not analysis documents.
+    Your output must be the exact email text ready to be sent to the lead.
     HONESTY LAW: Sign as {config['sender_name']}, Business: {config['business_name']}, Phone: {config['phone']}, Email: {config['email']}.
     ONLY use stats from this approved list: {config.get('approved_statistics', ['none'])}. No invented numbers."""
     
-    user_msg = f"""Analyze this lead and write a master-level pitch: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
+    user_msg = f"""Analyze this lead and write a master-level cold email pitch to: {lead['name']} ({lead['business']}). Details: {lead['details']}."""
     
     response = client.messages.create(
-        model="claude-haiku-4-5-20251001", # Deep reasoning engine
+        model="claude-haiku-4-5-20251001",
         max_tokens=800,
         system=system_prompt,
         messages=[{"role": "user", "content": user_msg}]
