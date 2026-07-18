@@ -73,13 +73,13 @@ def write_video_prompt(lead, pitch_text):
 
     # FIX 1: Updated model string to current running version
     response = client.messages.create(
-        model="claude-3-5-haiku-20241022",
+        model="claude-haiku-4-5-20251001",
         max_tokens=300,
         system=system_prompt,
         messages=[{"role": "user", "content": user_msg}]
     )
     
-    log_fuel(response.usage, "claude-3-5-haiku-20241022")
+    log_fuel(response.usage, "claude-haiku-4-5-20251001")
     return response.content[0].text.strip()
 
 # ============================================================
@@ -126,7 +126,7 @@ def main():
         SELECT l.id as lead_id, l.name, l.business, l.details, p.pitch_text, p.id as pitch_id 
         FROM leads l 
         JOIN pitches p ON l.id = p.lead_id 
-        WHERE p.status = 'PITCHED' 
+        WHERE p.status = 'APPROVED' 
           AND NOT EXISTS (SELECT 1 FROM videos v WHERE v.lead_id = l.id)
         ORDER BY l.id LIMIT 1
     """)
