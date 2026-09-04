@@ -14,7 +14,12 @@ import sqlite3
 import sys
 from datetime import datetime, timezone
 
-DB_PATH = "data/leads.db"
+# Was a bare relative "data/leads.db" -- silently pointed at whatever the
+# process's current working directory happened to be rather than this
+# project's real data dir. Made absolute, matching form_catcher.py's own
+# BASE_DIR-relative convention, so this always lands in the same
+# database regardless of how/where the process is started.
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "leads.db")
 
 BUSINESS_INFO = """You are the AI receptionist for Born AI Jobs / Job 73.
 We create custom video commercials for rental listings (landlords and
