@@ -2,8 +2,9 @@
 
 Answers visitor questions live on the landing page and captures their
 contact info into the Ledger — the "instant chat" upgrade for
-d11.pythonanywhere.com. Uses the existing Haiku API key already
-configured for X008.
+d11.pythonanywhere.com. Uses the existing DEEPSEEK_API_KEY already
+proven live for every other NorthFraim agent (mcp/neverx_agents.py) --
+no separate key of its own.
 
 Flask blueprint — wire into the existing form_catcher.py app.
 """
@@ -34,10 +35,10 @@ def _now_iso():
 
 
 def _get_api_key():
-    """Load the Haiku API key from environment. Never crashes."""
-    key = os.environ.get("ANTHROPIC_API_KEY")
+    """Load the DeepSeek API key from environment. Never crashes."""
+    key = os.environ.get("DEEPSEEK_API_KEY")
     if not key:
-        print("WARNING: ANTHROPIC_API_KEY not set; receptionist cannot respond.")
+        print("WARNING: DEEPSEEK_API_KEY not set; receptionist cannot respond.")
         return None
     return key
 
@@ -85,32 +86,35 @@ def save_chat_lead(name, contact, message):
 
 
 def get_response(visitor_message, conversation_history=None):
-    """Call the Haiku API to generate a receptionist reply. Never crashes.
+    """Call DeepSeek to generate a receptionist reply. Never crashes.
 
-    Returns a reply string, or a safe fallback message on any failure.
+    Same DEEPSEEK_API_KEY + OpenAI-compatible client already proven live
+    for every other NorthFraim agent (mcp/neverx_agents.py) -- no new
+    key needed. Returns a reply string, or a safe fallback message on
+    any failure.
     """
     api_key = _get_api_key()
     if api_key is None:
         return "Thanks for reaching out — a team member will follow up with you shortly."
 
     try:
-        import anthropic
+        from openai import OpenAI
     except ImportError:
-        print("WARNING: anthropic package not installed; using fallback reply.")
+        print("WARNING: openai package not installed; using fallback reply.")
         return "Thanks for reaching out — a team member will follow up with you shortly."
 
-    messages = conversation_history or []
-    messages = messages + [{"role": "user", "content": visitor_message}]
+    messages = [{"role": "system", "content": BUSINESS_INFO}]
+    messages += conversation_history or []
+    messages.append({"role": "user", "content": visitor_message})
 
     try:
-        client = anthropic.Anthropic(api_key=api_key)
-        response = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+        response = client.chat.completions.create(
+            model=os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"),
             max_tokens=300,
-            system=BUSINESS_INFO,
             messages=messages,
         )
-        reply_text = response.content[0].text if response.content else ""
+        reply_text = response.choices[0].message.content if response.choices else ""
         if not reply_text:
             return "Thanks for reaching out — a team member will follow up with you shortly."
         return reply_text
