@@ -4,35 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Born AI Jobs | Video Commercials for Rental Listings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root{--primary:#10b981;--accent:#06b6d4;--dark:#020617;--darker:#0f172a;--light:#f8fafc;--gray:#94a3b8;--gradient:linear-gradient(135deg,var(--primary),var(--accent));--radius:16px}
+        :root{--primary:#1474c4;--accent:#0a5cb2;--dark:#001b41;--darker:#ffffff;--light:#001b41;--gray:#6b7280;--border:#e5e7eb;--tint:#f7fcff;--gradient:linear-gradient(135deg,var(--primary),var(--accent));--radius:12px;--radius-pill:9999px;--shadow:0 2px 8px rgba(0,27,65,0.08)}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',sans-serif;background:var(--darker);color:var(--light);line-height:1.6}
+        body{font-family:'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--darker);color:var(--light);line-height:1.6}
         .hero{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:8rem 5% 4rem;max-width:1400px;margin:0 auto;align-items:center}
-        .hero-title{font-size:3.5rem;font-weight:900;line-height:1.1;margin-bottom:1.5rem}
+        .hero-title{font-size:3.5rem;font-weight:800;line-height:1.15;margin-bottom:1.5rem;color:var(--dark)}
         .gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .btn-primary{display:inline-block;background:var(--gradient);color:white;padding:1rem 2rem;border-radius:var(--radius);text-decoration:none;font-weight:600}
+        .btn-primary{display:inline-block;background:var(--gradient);color:white;padding:1rem 2rem;border-radius:var(--radius-pill);text-decoration:none;font-weight:700;box-shadow:var(--shadow)}
         .services{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;padding:4rem 5%;max-width:1200px;margin:0 auto}
-        .service-card{background:linear-gradient(145deg,#1e293b,#0f172a);padding:2rem;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.05)}
-        nav{padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(2,6,23,0.8);backdrop-filter:blur(20px);position:fixed;top:0;width:100%;z-index:1000}
-        nav a{color:var(--light);text-decoration:none;margin-left:1.5rem;font-size:0.875rem}
+        .service-card{background:#ffffff;padding:2rem;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow)}
+        nav{padding:1rem 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);position:fixed;top:0;width:100%;z-index:1000;border-bottom:1px solid var(--border)}
+        nav a{color:var(--dark);text-decoration:none;margin-left:1.5rem;font-size:0.875rem;font-weight:600}
 
         .how-it-works{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;padding:4rem 5%;max-width:1200px;margin:0 auto}
-        .step-card{background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;border:1px solid rgba(255,255,255,0.05)}
-        .step-num{display:inline-flex;width:2rem;height:2rem;border-radius:50%;background:var(--gradient);align-items:center;justify-content:center;font-weight:700;font-size:0.875rem;margin-bottom:0.75rem}
+        .step-card{background:#ffffff;padding:1.5rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);box-shadow:var(--shadow)}
+        .step-num{display:inline-flex;width:2rem;height:2rem;border-radius:50%;background:var(--gradient);align-items:center;justify-content:center;font-weight:700;font-size:0.875rem;margin-bottom:0.75rem;color:#fff}
 
         .booking-section {
-            background: linear-gradient(145deg, #1e293b, #0f172a);
+            background: var(--tint);
             padding: 4rem 5%;
             text-align: center;
         }
         .booking-form {
             max-width: 600px;
             margin: 2rem auto 0;
-            background: #0f172a;
+            background: #ffffff;
             padding: 2rem;
             border-radius: var(--radius);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
         .form-group {
             margin-bottom: 1.25rem;
@@ -47,21 +50,52 @@
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 0.75rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: #1e293b;
-            color: var(--light);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #ffffff;
+            color: var(--dark);
             font-size: 1rem;
         }
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
         }
+        h2, h3 { color: var(--dark); }
+
+        /* Real CSS-only animated hero visual: this business has no photo/video
+           asset in its hero, so motion comes from a looping radar-sweep behind
+           the real 4-step icon grid -- standing in for "AI agents scanning
+           listings", which is literally what the copy below already claims. */
+        .scan-visual{ position:relative; }
+        .scan-visual::before{
+            content:""; position:absolute; inset:-10%; border-radius:50%;
+            background:conic-gradient(from 0deg, rgba(20,116,196,0.28), transparent 35%);
+            animation:radar-spin 4s linear infinite;
+            z-index:0;
+        }
+        .scan-visual > div{ position:relative; z-index:1; }
+        @keyframes radar-spin{ to{ transform:rotate(360deg); } }
+
+        .type-line{
+            font-family:'Open Sans',sans-serif; font-size:0.95rem; color:var(--gray);
+            margin-bottom:1.5rem; min-height:1.4em; position:relative;
+        }
+        .type-cursor{ display:inline-block; width:8px; background:var(--primary); animation:blink 0.9s steps(1) infinite; }
+        @keyframes blink{ 50%{ opacity:0; } }
+
+        [data-reveal]{ opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+        [data-reveal].revealed{ opacity:1; transform:translateY(0); }
+
+        @media (prefers-reduced-motion: reduce){
+            .scan-visual::before{ animation:none; }
+            .type-cursor{ animation:none; }
+            [data-reveal]{ transition:none; opacity:1; transform:none; }
+        }
     </style>
 </head>
 <body>
     <nav>
-        <div style="font-weight:700;font-size:1.25rem;">🎬 Born AI Jobs</div>
+        <div style="font-weight:800;font-size:1.25rem;color:var(--dark);">🎬 Born AI Jobs</div>
         <div>
             <a href="/">Home</a>
             <a href="/norframe">Norframe</a>
@@ -72,39 +106,40 @@
 
     <section class="hero" style="padding-top:8rem;">
         <div>
-            <span style="background:rgba(16,185,129,0.1);border:1px solid var(--primary);color:var(--primary);padding:0.5rem 1rem;border-radius:50px;font-size:0.875rem;">AI-Found. AI-Pitched. Human-Made Video.</span>
+            <span style="background:var(--tint);border:1px solid var(--primary);color:var(--primary);padding:0.5rem 1rem;border-radius:var(--radius-pill);font-size:0.875rem;font-weight:600;">AI-Found. AI-Pitched. Human-Made Video.</span>
             <h1 class="hero-title">Video Commercials for <span class="gradient-text">Rental Listings</span></h1>
             <p style="font-size:1.25rem;color:var(--gray);margin-bottom:2rem;">We build custom video commercials for landlords and Airbnb hosts — listings that get scrolled past become listings people stop for. If we reached out to you, it's because our system already found your property and thinks it deserves better than photos.</p>
+            <div class="type-line"><span id="typeTarget"></span><span class="type-cursor">&nbsp;</span></div>
             <a href="#book" class="btn-primary">🎥 Get Your Listing a Commercial</a>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
-            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">🔍</div><p>We Find Hosts</p></div>
-            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">✍️</div><p>We Write the Pitch</p></div>
-            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">🎬</div><p>We Make the Video</p></div>
-            <div style="background:linear-gradient(145deg,#1e293b,#0f172a);padding:1.5rem;border-radius:var(--radius);text-align:center;"><div style="font-size:2rem;">📈</div><p>You Get Bookings</p></div>
+        <div class="scan-visual" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+            <div style="background:#ffffff;padding:1.5rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);box-shadow:var(--shadow);"><div style="font-size:2rem;">🔍</div><p>We Find Hosts</p></div>
+            <div style="background:#ffffff;padding:1.5rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);box-shadow:var(--shadow);"><div style="font-size:2rem;">✍️</div><p>We Write the Pitch</p></div>
+            <div style="background:#ffffff;padding:1.5rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);box-shadow:var(--shadow);"><div style="font-size:2rem;">🎬</div><p>We Make the Video</p></div>
+            <div style="background:#ffffff;padding:1.5rem;border-radius:var(--radius);text-align:center;border:1px solid var(--border);box-shadow:var(--shadow);"><div style="font-size:2rem;">📈</div><p>You Get Bookings</p></div>
         </div>
     </section>
 
-    <section style="padding:4rem 5%;text-align:center;background:rgba(15,23,42,0.5);">
+    <section style="padding:4rem 5%;text-align:center;background:var(--tint);">
         <h2 style="font-size:2.5rem;margin-bottom:1rem;">🤖 <span class="gradient-text">How This Actually Works</span></h2>
         <p style="color:var(--gray);max-width:700px;margin:0 auto 3rem;">Born AI Jobs isn't a storefront waiting for visitors — it's an AI lead-generation engine that goes out and finds the people who need this, so a listing video only gets built where it'll actually make a difference.</p>
         <div class="how-it-works">
-            <div class="step-card">
+            <div class="step-card" data-reveal>
                 <div class="step-num">1</div>
                 <h3>Scan the Listings</h3>
                 <p style="color:var(--gray);margin-top:0.5rem;">AI agents scan Airbnb, Craigslist, and Zillow for rentals that could use a stronger pitch.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card" data-reveal>
                 <div class="step-num">2</div>
                 <h3>Write a Real Pitch</h3>
                 <p style="color:var(--gray);margin-top:0.5rem;">Every host gets a pitch written about their actual property — never a form letter.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card" data-reveal>
                 <div class="step-num">3</div>
                 <h3>Sign Up</h3>
                 <p style="color:var(--gray);margin-top:0.5rem;">Interested hosts respond and get scheduled — no cold sales calls involved.</p>
             </div>
-            <div class="step-card">
+            <div class="step-card" data-reveal>
                 <div class="step-num">4</div>
                 <h3>Get the Commercial</h3>
                 <p style="color:var(--gray);margin-top:0.5rem;">A custom video commercial gets produced for the listing and delivered ready to post.</p>
@@ -115,10 +150,10 @@
     <section style="padding:4rem 5%;text-align:center;">
         <h2 style="font-size:2.5rem;margin-bottom:3rem;">🎬 <span class="gradient-text">Commercial Packages</span></h2>
         <div class="services">
-            <div class="service-card"><h3>🏠 Single Listing Spotlight</h3><p style="color:var(--gray);margin-top:0.5rem;">One property, one polished commercial built to stop the scroll on Airbnb or Zillow.</p></div>
-            <div class="service-card"><h3>🗝️ Multi-Property Package</h3><p style="color:var(--gray);margin-top:0.5rem;">Manage several rentals? Get a consistent video style across your whole portfolio.</p></div>
-            <div class="service-card"><h3>✨ Turnover Reveal</h3><p style="color:var(--gray);margin-top:0.5rem;">Just renovated or refreshed a unit? A before/after commercial that sells the upgrade.</p></div>
-            <div class="service-card"><h3>📅 Seasonal Refresh</h3><p style="color:var(--gray);margin-top:0.5rem;">New season, new commercial — keep your listing's video current year-round.</p></div>
+            <div class="service-card" data-reveal><h3>🏠 Single Listing Spotlight</h3><p style="color:var(--gray);margin-top:0.5rem;">One property, one polished commercial built to stop the scroll on Airbnb or Zillow.</p></div>
+            <div class="service-card" data-reveal><h3>🗝️ Multi-Property Package</h3><p style="color:var(--gray);margin-top:0.5rem;">Manage several rentals? Get a consistent video style across your whole portfolio.</p></div>
+            <div class="service-card" data-reveal><h3>✨ Turnover Reveal</h3><p style="color:var(--gray);margin-top:0.5rem;">Just renovated or refreshed a unit? A before/after commercial that sells the upgrade.</p></div>
+            <div class="service-card" data-reveal><h3>📅 Seasonal Refresh</h3><p style="color:var(--gray);margin-top:0.5rem;">New season, new commercial — keep your listing's video current year-round.</p></div>
         </div>
     </section>
 
@@ -160,8 +195,60 @@
         </form>
     </section>
 
-    <footer style="padding:3rem 5%;text-align:center;color:var(--gray);border-top:1px solid rgba(255,255,255,0.05);">
+    <footer style="padding:3rem 5%;text-align:center;color:var(--gray);border-top:1px solid var(--border);">
         <p>© 2026 Born AI Jobs — Job 73. AI-found leads, human-made commercials. Based in Springfield, Ohio.</p>
     </footer>
+
+<script>
+  // Real "typing" effect: cycles through the SAME real platforms this page's
+  // own copy already claims to scan ("AI agents scan Airbnb, Craigslist, and
+  // Zillow").
+  (function () {
+    var target = document.getElementById('typeTarget');
+    if (!target) return;
+    var phrases = ['an Airbnb listing', 'a Craigslist rental', 'a Zillow property'];
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      target.textContent = 'Right now, our agents are scanning ' + phrases[0] + '.';
+      return;
+    }
+    var prefix = 'Right now, our agents are scanning ';
+    var suffix = '.';
+    var i = 0, char = 0, deleting = false;
+    function tick() {
+      var phrase = phrases[i % phrases.length];
+      if (!deleting) {
+        char++;
+        target.textContent = prefix + phrase.slice(0, char) + (char === phrase.length ? suffix : '');
+        if (char === phrase.length) { deleting = true; setTimeout(tick, 1600); return; }
+      } else {
+        char--;
+        target.textContent = prefix + phrase.slice(0, char);
+        if (char === 0) { deleting = false; i++; }
+      }
+      setTimeout(tick, deleting ? 22 : 42);
+    }
+    tick();
+  })();
+</script>
+
+<script>
+  // Real scroll-triggered reveal: plain IntersectionObserver, no library.
+  (function () {
+    var els = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('revealed'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(function (el) { observer.observe(el); });
+  })();
+</script>
 </body>
 </html>
